@@ -6,8 +6,8 @@ public class ArrowProjectile : MonoBehaviour
     public float damage = 0.2f;
 
     [Header("Movement Settings")]
-    public float speed = 10f;
-    public float lifeTime = 5f;
+    public float speed = 0.125f;
+    public float lifeTime = 30f;
 
     [Header("Visual Effects")]
     public float rotationSpeed = 360f; // Degrees per second

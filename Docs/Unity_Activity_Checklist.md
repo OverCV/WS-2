@@ -103,7 +103,7 @@
 
 ### 5.1 Conectar Scripts a GameObjects
 - [x] **[AUTOMÁTICO - MCP]** Asignar `PlayerHealthSystem.cs` al `PlayerArmature`
-- [x] **[AUTOMÁTICO - MCP]** Asignar `InvulnerabilitySystem.cs` al `PlayerArmature`  
+- [x] **[AUTOMÁTICO - MCP]** Asignar `InvulnerabilitySystem.cs` al `PlayerArmature`
 - [x] **[AUTOMÁTICO - MCP]** Asignar `TrapWallDetector.cs` al `TriggerZone`
 - [x] **[AUTOMÁTICO - MCP]** Asignar `ArrowLauncher.cs` al `TrapWall`
 
