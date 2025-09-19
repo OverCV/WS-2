@@ -4,55 +4,55 @@ public class ArrowProjectile : MonoBehaviour
 {
     [Header("Damage Settings")]
     public float damage = 0.2f;
-    
+
     [Header("Movement Settings")]
     public float speed = 10f;
     public float lifeTime = 5f;
-    
+
     [Header("Visual Effects")]
     public float rotationSpeed = 360f; // Degrees per second
-    
+
     [Header("Debug")]
     public bool enableDebugLogs = true;
-    
+
     private Rigidbody rb;
     private bool hasHitTarget = false;
     private Vector3 lastPosition;
-    
+
     void Start()
     {
         // Get Rigidbody component
         rb = GetComponent<Rigidbody>();
-        
+
         if (rb == null)
         {
             Debug.LogError("ArrowProjectile: No Rigidbody component found on " + gameObject.name);
         }
-        
+
         // Store initial position for movement tracking
         lastPosition = transform.position;
-        
+
         // Auto-destroy after lifetime
         Destroy(gameObject, lifeTime);
-        
+
         if (enableDebugLogs)
         {
             Debug.Log("Flecha creada - Daño: " + damage + ", Velocidad: " + speed + ", Vida: " + lifeTime + "s");
         }
     }
-    
+
     void Update()
     {
         // Rotate the arrow for visual effect
         transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
-        
+
         // Track movement for debugging
         if (enableDebugLogs && Vector3.Distance(lastPosition, transform.position) > 0.1f)
         {
             lastPosition = transform.position;
         }
     }
-    
+
     /// <summary>
     /// Sets the arrow's velocity towards a target
     /// </summary>
@@ -62,20 +62,20 @@ public class ArrowProjectile : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = direction.normalized * speed;
-            
+
             // Orient the arrow to face its movement direction
             if (direction != Vector3.zero)
             {
                 transform.rotation = Quaternion.LookRotation(direction);
             }
-            
+
             if (enableDebugLogs)
             {
                 Debug.Log("Flecha lanzada en dirección: " + direction.normalized);
             }
         }
     }
-    
+
     /// <summary>
     /// Launches the arrow towards a specific target position
     /// </summary>
@@ -85,7 +85,7 @@ public class ArrowProjectile : MonoBehaviour
         Vector3 direction = (targetPosition - transform.position).normalized;
         SetDirection(direction);
     }
-    
+
     /// <summary>
     /// Launches the arrow towards a target transform
     /// </summary>
@@ -97,7 +97,7 @@ public class ArrowProjectile : MonoBehaviour
             LaunchTowards(target.position + Vector3.up * 1.0f); // Aim slightly higher for better hit detection
         }
     }
-    
+
     /// <summary>
     /// Detects collision with the player or other objects
     /// </summary>
@@ -109,7 +109,7 @@ public class ArrowProjectile : MonoBehaviour
         {
             return;
         }
-        
+
         // Check if we hit the player
         if (other.CompareTag("Player"))
         {
@@ -122,7 +122,7 @@ public class ArrowProjectile : MonoBehaviour
             HandleEnvironmentHit(other.gameObject);
         }
     }
-    
+
     /// <summary>
     /// Handles what happens when the arrow hits the player
     /// </summary>
@@ -130,18 +130,18 @@ public class ArrowProjectile : MonoBehaviour
     private void HandlePlayerHit(GameObject player)
     {
         hasHitTarget = true;
-        
+
         // Get player's health and invulnerability systems
         PlayerHealthSystem healthSystem = player.GetComponent<PlayerHealthSystem>();
         InvulnerabilitySystem invulnerabilitySystem = player.GetComponent<InvulnerabilitySystem>();
-        
+
         if (healthSystem == null)
         {
             Debug.LogError("ArrowProjectile: No se encontró PlayerHealthSystem en el jugador " + player.name);
             DestroyArrow();
             return;
         }
-        
+
         // Check if player is invulnerable
         if (invulnerabilitySystem != null && invulnerabilitySystem.isInvulnerable)
         {
@@ -153,11 +153,11 @@ public class ArrowProjectile : MonoBehaviour
             healthSystem.TakeDamage(damage);
             Debug.Log("Flecha impactó - Daño aplicado: " + damage.ToString("F1"));
         }
-        
+
         // Destroy the arrow after hitting
         DestroyArrow();
     }
-    
+
     /// <summary>
     /// Handles what happens when the arrow hits the environment
     /// </summary>
@@ -165,23 +165,23 @@ public class ArrowProjectile : MonoBehaviour
     private void HandleEnvironmentHit(GameObject hitObject)
     {
         hasHitTarget = true;
-        
+
         if (enableDebugLogs)
         {
             Debug.Log("Flecha impactó objeto: " + hitObject.name);
         }
-        
+
         // Stop the arrow's movement
         if (rb != null)
         {
             rb.linearVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
-        
+
         // Destroy after a short delay to show impact
         Destroy(gameObject, 1f);
     }
-    
+
     /// <summary>
     /// Destroys the arrow immediately
     /// </summary>
@@ -191,10 +191,10 @@ public class ArrowProjectile : MonoBehaviour
         {
             Debug.Log("Flecha destruida tras impacto");
         }
-        
+
         Destroy(gameObject);
     }
-    
+
     /// <summary>
     /// Handle collision with non-trigger colliders
     /// </summary>
@@ -206,7 +206,7 @@ public class ArrowProjectile : MonoBehaviour
             HandleEnvironmentHit(collision.gameObject);
         }
     }
-    
+
     /// <summary>
     /// For debugging - draws a line showing the arrow's trajectory
     /// </summary>
