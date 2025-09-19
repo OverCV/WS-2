@@ -31,14 +31,14 @@
 - [x] **[MANUAL - TÚ]** Player posicionado sobre el terreno
 
 ### 2.2 Configurar Cámara
-- [ ] **[AUTOMÁTICO - MCP]** Instanciar `PlayerFollowCamera.prefab` en la escena
-- [ ] **[AUTOMÁTICO - MCP]** Configurar la cámara como hija del Player o asignar Target al PlayerArmature
-- [ ] **[AUTOMÁTICO - MCP]** Verificar configuración de Third Person Controller
+- [x] **[AUTOMÁTICO - MCP]** Instanciar `PlayerFollowCamera.prefab` en la escena
+- [x] **[AUTOMÁTICO - MCP]** Configurar la cámara como hija del Player o asignar Target al PlayerArmature
+- [x] **[AUTOMÁTICO - MCP]** Verificar configuración de Third Person Controller
 
 ## FASE 3: SISTEMAS DE JUEGO (AUTOMÁTICO - MCP)
 
 ### 3.1 Sistema de Vida del Jugador
-- [ ] **[AUTOMÁTICO - MCP]** Crear script `PlayerHealthSystem.cs` en `Assets/Scripts/` con:
+- [x] **[AUTOMÁTICO - MCP]** Crear script `PlayerHealthSystem.cs` en `Assets/Scripts/` con:
   - Variable float currentHealth = 1.0f
   - Método TakeDamage(float damage)
   - Método IsAlive()
@@ -46,7 +46,7 @@
   - Referencia al InvulnerabilitySystem
 
 ### 3.2 Sistema de Invulnerabilidad  
-- [ ] **[AUTOMÁTICO - MCP]** Crear script `InvulnerabilitySystem.cs` en `Assets/Scripts/` con:
+- [x] **[AUTOMÁTICO - MCP]** Crear script `InvulnerabilitySystem.cs` en `Assets/Scripts/` con:
   - bool isInvulnerable = false
   - float invulnerabilityDuration = 5.0f
   - Corrutina para manejar timer
@@ -54,10 +54,10 @@
   - Método público ActivateInvulnerability()
 
 ### 3.3 Ítem de Invulnerabilidad
-- [ ] **[AUTOMÁTICO - MCP]** Crear GameObject `InvulnerabilityPowerUp` en la escena
-- [ ] **[AUTOMÁTICO - MCP]** Asignar modelo `Cup empty.fbx` al GameObject
-- [ ] **[AUTOMÁTICO - MCP]** Agregar SphereCollider como Trigger
-- [ ] **[AUTOMÁTICO - MCP]** Crear script `InvulnerabilityPowerUp.cs` con:
+- [x] **[AUTOMÁTICO - MCP]** Crear GameObject `InvulnerabilityPowerUp` en la escena
+- [x] **[AUTOMÁTICO - MCP]** Asignar modelo `Cup empty.fbx` al GameObject
+- [x] **[AUTOMÁTICO - MCP]** Agregar SphereCollider como Trigger
+- [x] **[AUTOMÁTICO - MCP]** Crear script `InvulnerabilityPowerUp.cs` con:
   - OnTriggerEnter detecta tag "Player"
   - Encuentra PlayerHealthSystem en el jugador
   - Llama ActivateInvulnerability()
@@ -66,23 +66,23 @@
 ## FASE 4: SISTEMA DE PARED TRAMPA (AUTOMÁTICO - MCP)
 
 ### 4.1 Crear Pared Trampa
-- [ ] **[AUTOMÁTICO - MCP]** Crear GameObject `TrapWall` en la escena
-- [ ] **[AUTOMÁTICO - MCP]** Agregar Cube primitivo, escalar (1, 3, 0.2)
-- [ ] **[AUTOMÁTICO - MCP]** Crear Material `TrapWallMaterial` color rojo
-- [ ] **[AUTOMÁTICO - MCP]** Crear GameObject hijo `TriggerZone` con BoxCollider (IsTrigger = true)
+- [x] **[AUTOMÁTICO - MCP]** Crear GameObject `TrapWall` en la escena
+- [x] **[AUTOMÁTICO - MCP]** Agregar Cube primitivo, escalar (1, 3, 0.2)
+- [x] **[AUTOMÁTICO - MCP]** Crear Material `TrapWallMaterial` color rojo
+- [x] **[AUTOMÁTICO - MCP]** Crear GameObject hijo `TriggerZone` con BoxCollider (IsTrigger = true)
 
 ### 4.2 Sistema de Detección 
-- [ ] **[AUTOMÁTICO - MCP]** Crear script `TrapWallDetector.cs` con:
+- [x] **[AUTOMÁTICO - MCP]** Crear script `TrapWallDetector.cs` con:
   - OnTriggerEnter detecta tag "Player"
   - Referencia al componente ArrowLauncher
   - Cooldown 2 segundos
   - Log: "¡Jugador detectado! Disparando flechas!"
 
 ### 4.3 Sistema de Flechas
-- [ ] **[AUTOMÁTICO - MCP]** Crear prefab `ArrowProjectile` en `Assets/Prefabs/`
-- [ ] **[AUTOMÁTICO - MCP]** Usar Capsule escalada (0.1, 0.5, 0.1) como modelo
-- [ ] **[AUTOMÁTICO - MCP]** Agregar Rigidbody y CapsuleCollider (IsTrigger = true)
-- [ ] **[AUTOMÁTICO - MCP]** Crear script `ArrowProjectile.cs` con:
+- [x] **[AUTOMÁTICO - MCP]** Crear prefab `ArrowProjectile` en `Assets/Prefabs/`
+- [x] **[AUTOMÁTICO - MCP]** Usar Capsule escalada (0.1, 0.5, 0.1) como modelo
+- [x] **[AUTOMÁTICO - MCP]** Agregar Rigidbody y CapsuleCollider (IsTrigger = true)
+- [x] **[AUTOMÁTICO - MCP]** Crear script `ArrowProjectile.cs` con:
   - float damage = 0.2f
   - OnTriggerEnter detecta tag "Player"
   - Verifica si player.GetComponent<InvulnerabilitySystem>().isInvulnerable
@@ -91,27 +91,27 @@
   - Destroy(gameObject, 5f) para cleanup
 
 ### 4.4 Lanzador de Flechas
-- [ ] **[AUTOMÁTICO - MCP]** Crear script `ArrowLauncher.cs` con:
+- [x] **[AUTOMÁTICO - MCP]** Crear script `ArrowLauncher.cs` con:
   - Transform[] launchPoints (3 posiciones)
   - GameObject arrowPrefab (referencia al ArrowProjectile)
   - Método LaunchArrows() que instancia 3 flechas
   - AddForce hacia el jugador
   - Log: "¡Flechas disparadas!"
-- [ ] **[AUTOMÁTICO - MCP]** Crear 3 Empty GameObjects como hijos de TrapWall para launch points
+- [x] **[AUTOMÁTICO - MCP]** Crear 3 Empty GameObjects como hijos de TrapWall para launch points
 
 ## FASE 5: INTEGRACIÓN Y CONFIGURACIÓN (AUTOMÁTICO - MCP)
 
 ### 5.1 Conectar Scripts a GameObjects
-- [ ] **[AUTOMÁTICO - MCP]** Asignar `PlayerHealthSystem.cs` al `PlayerArmature`
-- [ ] **[AUTOMÁTICO - MCP]** Asignar `InvulnerabilitySystem.cs` al `PlayerArmature`  
-- [ ] **[AUTOMÁTICO - MCP]** Asignar `TrapWallDetector.cs` al `TriggerZone`
-- [ ] **[AUTOMÁTICO - MCP]** Asignar `ArrowLauncher.cs` al `TrapWall`
+- [x] **[AUTOMÁTICO - MCP]** Asignar `PlayerHealthSystem.cs` al `PlayerArmature`
+- [x] **[AUTOMÁTICO - MCP]** Asignar `InvulnerabilitySystem.cs` al `PlayerArmature`  
+- [x] **[AUTOMÁTICO - MCP]** Asignar `TrapWallDetector.cs` al `TriggerZone`
+- [x] **[AUTOMÁTICO - MCP]** Asignar `ArrowLauncher.cs` al `TrapWall`
 
 ### 5.2 Configurar Referencias en Inspector
-- [ ] **[AUTOMÁTICO - MCP]** TrapWallDetector: asignar ArrowLauncher del padre
-- [ ] **[AUTOMÁTICO - MCP]** ArrowLauncher: asignar ArrowProjectile prefab
-- [ ] **[AUTOMÁTICO - MCP]** ArrowLauncher: asignar los 3 LaunchPoints
-- [ ] **[AUTOMÁTICO - MCP]** Verificar que PlayerArmature tiene tag "Player"
+- [x] **[AUTOMÁTICO - MCP]** TrapWallDetector: asignar ArrowLauncher del padre (auto-find)
+- [x] **[AUTOMÁTICO - MCP]** ArrowLauncher: asignar ArrowProjectile prefab
+- [x] **[AUTOMÁTICO - MCP]** ArrowLauncher: asignar los 3 LaunchPoints (auto-find)
+- [x] **[AUTOMÁTICO - MCP]** Verificar que PlayerArmature tiene tag "Player"
 
 ## FASE 6: POSICIONAMIENTO Y TESTING (MANUAL - TÚ)
 
