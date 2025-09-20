@@ -28,6 +28,13 @@ public class ArrowProjectile : MonoBehaviour
         {
             Debug.LogError("ArrowProjectile: No Rigidbody component found on " + gameObject.name);
         }
+        else
+        {
+            // Ensure no gravity and proper physics settings
+            rb.useGravity = false;
+            rb.linearDamping = 0f;
+            rb.angularDamping = 0f;
+        }
 
         // Store initial position for movement tracking
         lastPosition = transform.position;
@@ -56,22 +63,35 @@ public class ArrowProjectile : MonoBehaviour
     /// <summary>
     /// Sets the arrow's velocity towards a target
     /// </summary>
-    /// <param name="direction">Direction to shoot the arrow</param>
+    /// <param name="direction">Direction to shoot the arrow (can include speed multiplier)</param>
     public void SetDirection(Vector3 direction)
     {
         if (rb != null)
         {
-            rb.linearVelocity = direction.normalized * speed;
+            // Ensure physics settings are correct
+            rb.useGravity = false;
+            rb.linearDamping = 0f;
+            rb.angularDamping = 0f;
+            
+            // Set velocity - if direction magnitude is greater than 1, it includes speed
+            if (direction.magnitude > 1f)
+            {
+                rb.linearVelocity = direction;
+            }
+            else
+            {
+                rb.linearVelocity = direction.normalized * speed;
+            }
 
             // Orient the arrow to face its movement direction
             if (direction != Vector3.zero)
             {
-                transform.rotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.LookRotation(direction.normalized);
             }
 
             if (enableDebugLogs)
             {
-                Debug.Log("Flecha lanzada en dirección: " + direction.normalized);
+                Debug.Log("Flecha lanzada en dirección: " + direction.normalized + " con velocidad: " + rb.linearVelocity.magnitude);
             }
         }
     }

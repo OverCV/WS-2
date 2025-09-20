@@ -131,30 +131,63 @@ public class ArrowLauncher : MonoBehaviour
         }
     }
 
-    private void LaunchArrowFromPoint(Transform launchPoint, Vector3 targetPosition, int arrowIndex)
+private void LaunchArrowFromPoint(Transform launchPoint, Vector3 targetPosition, int arrowIndex)
     {
+        // Calculate direction from launch point to target
         Vector3 baseDirection = (targetPosition - launchPoint.position).normalized;
         Vector3 direction = ApplySpread(baseDirection, arrowIndex);
 
-        GameObject arrow = Instantiate(arrowPrefab, launchPoint.position, Quaternion.LookRotation(direction));
-
-        ArrowProjectile arrowScript = arrow.GetComponent<ArrowProjectile>();
-        if (arrowScript != null)
+        // Ensure the launch point is active for the arrow creation
+        if (!launchPoint.gameObject.activeSelf)
         {
-            arrowScript.SetDirection(direction);
-        }
-        else
-        {
-            Rigidbody arrowRb = arrow.GetComponent<Rigidbody>();
-            if (arrowRb != null)
+            launchPoint.gameObject.SetActive(true);
+            if (enableDebugLogs)
             {
-                arrowRb.linearVelocity = direction * launchForce;
+                Debug.Log("ArrowLauncher: Activated launch point " + launchPoint.name);
             }
         }
 
+        // Calculate spawn position slightly offset from the wall to avoid collision
+        Vector3 spawnPosition = launchPoint.position + direction * 0.5f;
+        
+        // Create the arrow at the calculated spawn position
+        GameObject arrow = Instantiate(arrowPrefab, spawnPosition, Quaternion.LookRotation(direction));
+
+        // Configure the arrow's physics and direction
+        ArrowProjectile arrowScript = arrow.GetComponent<ArrowProjectile>();
+        if (arrowScript != null)
+        {
+            // Set the direction and speed
+            arrowScript.SetDirection(direction * launchForce);
+        }
+        else
+        {
+            // Fallback: use rigidbody directly if no ArrowProjectile script
+            Rigidbody arrowRb = arrow.GetComponent<Rigidbody>();
+            if (arrowRb != null)
+            {
+                arrowRb.useGravity = false;
+                arrowRb.linearDamping = 0f;
+                arrowRb.angularDamping = 0f;
+                arrowRb.linearVelocity = direction * launchForce;
+                
+                if (enableDebugLogs)
+                {
+                    Debug.Log("ArrowLauncher: Using fallback Rigidbody method for arrow " + (arrowIndex + 1));
+                }
+            }
+            else
+            {
+                Debug.LogError("ArrowLauncher: Arrow prefab has no Rigidbody or ArrowProjectile component!");
+            }
+        }
+
+        // Ensure the arrow is active and visible
+        arrow.SetActive(true);
+
         if (enableDebugLogs)
         {
-            Debug.Log("Flecha " + (arrowIndex + 1) + " lanzada desde: " + launchPoint.name);
+            Debug.Log("Flecha " + (arrowIndex + 1) + " lanzada desde: " + launchPoint.name + " hacia: " + targetPosition + " con dirección: " + direction);
         }
     }
 
